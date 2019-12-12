@@ -7,8 +7,21 @@ agent:
 blocks:
   - name: Tests
     task:
+      env_vars:
+        - name: LANG
+          value: en_US.UTF-8
+      prologue:
+        commands:
+          - checkout
+          - cache restore
+          - bundle install --path vendor/bundle
+          - cache store
       jobs:
-        - name: swift test
+        - name: Fastlane test
+          commands:
+            - bundle exec xcversion select 10.2
+            - bundle exec fastlane test
+        - name: Swift Test
           commands:
             - checkout
             - swift build -v
